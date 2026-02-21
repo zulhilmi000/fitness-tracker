@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'screens/home_screen.dart';
+import 'models/activity_model.dart';
 import 'screens/activity_screen.dart';
-import 'screens/exercise_search_screen.dart';
+import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/exercise_search_screen.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -13,6 +15,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(ActivityModelAdapter());
+  await Hive.openBox<ActivityModel>('activities');
+
+  // Initialize Notification
   const AndroidInitializationSettings androidSettings =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -69,7 +77,6 @@ class FitnessTrackerAppState extends State<FitnessTrackerApp> {
       darkTheme: buildDarkTheme(),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: MainPage(isDarkMode: isDarkMode, onDarkModeChanged: toggleDarkMode),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -118,8 +125,6 @@ class MainPageState extends State<MainPage> {
         currentIndex: currentIndex,
         onTap: onTabTapped,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
