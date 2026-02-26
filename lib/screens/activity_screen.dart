@@ -60,6 +60,14 @@ class ActivityScreenState extends State<ActivityScreen> {
       editingIndex = null;
     }
 
+    // --- LOG DATA TO TERMINAL ---
+    print("--- Current Hive Data ---");
+    for (var i = 0; i < activityBox.length; i++) {
+      final item = activityBox.getAt(i);
+      print("Index $i: ${item?.type}, ${item?.duration}min, ${item?.calories}cal");
+    }
+    // ----------------------------
+
     activityController.clear();
     durationController.clear();
     caloriesController.clear();
@@ -89,6 +97,11 @@ class ActivityScreenState extends State<ActivityScreen> {
           TextButton(
             onPressed: () {
               activityBox.deleteAt(index);
+
+              // --- LOG DATA AFTER DELETE ---
+              print("Item deleted. Remaining: ${activityBox.values.toList()}");
+              // ------------------------------
+
               Navigator.pop(context);
               setState(() {});
             },
@@ -114,7 +127,7 @@ class ActivityScreenState extends State<ActivityScreen> {
             ),
             pw.SizedBox(height: 20),
             ...activities.map(
-              (a) =>
+                  (a) =>
                   pw.Text("${a.type} - ${a.duration} min - ${a.calories} cal"),
             ),
           ],

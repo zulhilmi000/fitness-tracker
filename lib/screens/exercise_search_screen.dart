@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart'; // Required for kIsWeb
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'exercise_detail_screen.dart';
@@ -68,8 +68,7 @@ class _ExerciseSearchScreenState extends State<ExerciseSearchScreen> {
           exerciseResults = filtered.map((exercise) {
             String rawUrl = exercise['imageUrl']?.toString() ?? '';
 
-            // SMART IMAGE LOADING:
-            // Use proxy on Web (laptop) to fix CORS. Use direct URL on Phone.
+            
             String finalImageUrl = (kIsWeb && rawUrl.isNotEmpty)
                 ? 'https://corsproxy.io/?${Uri.encodeComponent(rawUrl)}'
                 : rawUrl;

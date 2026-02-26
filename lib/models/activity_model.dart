@@ -18,4 +18,8 @@ class ActivityModel extends HiveObject {
     required this.duration,
     required this.calories,
   });
+  @override
+  String toString() {
+    return 'Activity(type: $type, duration: $duration, cal: $calories)';
+  }
 }
